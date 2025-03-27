@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính toán vật tư khung kèo</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        input, select, button { margin: 10px; padding: 10px; font-size: 16px; }
+        #result { margin-top: 20px; padding: 15px; border: 1px solid #ddd; display: inline-block; }
+    </style>
+</head>
+<body>
+
+    <h2>Ứng dụng tính toán vật tư khung kèo</h2>
+    
+    <label>Chiều dài (m):</label>
+    <input type="number" id="length" min="1" required>
+
+    <label>Chiều rộng (m):</label>
+    <input type="number" id="width" min="1" required>
+
+    <label>Kiểu mái:</label>
+    <select id="roofType">
+        <option value="maiBang">Mái bằng</option>
+        <option value="maiDoc">Mái dốc</option>
+        <option value="maiChuA">Mái chữ A</option>
+    </select>
+
+    <br>
+    <button onclick="calculateMaterials()">Tính toán</button>
+
+    <div id="result"></div>
+
+    <script>
+        function calculateMaterials() {
+            let length = parseFloat(document.getElementById("length").value);
+            let width = parseFloat(document.getElementById("width").value);
+            let roofType = document.getElementById("roofType").value;
+
+            if (isNaN(length) || isNaN(width) || length <= 0 || width <= 0) {
+                alert("Vui lòng nhập chiều dài và chiều rộng hợp lệ!");
+                return;
+            }
+
+            let frameCount = Math.ceil((length * width) / 5); // Số khung kèo
+            let xagolCount = Math.ceil((length * 2) + (width * 2)); // Số xà gồ
+            let tonCount = Math.ceil(length * width * 1.1); // Diện tích tôn (tính dư 10%)
+
+            let resultHTML = `<h3>Kết quả tính toán</h3>`;
+            resultHTML += `<p><strong>Khung kèo:</strong> ${frameCount} bộ</p>`;
+            resultHTML += `<p><strong>Xà gồ:</strong> ${xagolCount} thanh</p>`;
+            resultHTML += `<p><strong>Tôn:</strong> ${tonCount} m²</p>`;
+
+            document.getElementById("result").innerHTML = resultHTML;
+        }
+    </script>
+
+</body>
+</html>
