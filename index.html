@@ -5,32 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tính toán vật tư khung kèo</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        input, select, button { margin: 10px; padding: 10px; font-size: 16px; }
-        #result { margin-top: 20px; padding: 15px; border: 1px solid #ddd; display: inline-block; }
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            padding: 20px; 
+            background: url('villa-garden.jpg') no-repeat center center/cover;
+            color: white; /* Để chữ dễ đọc trên nền ảnh */
+        }
+        input, select, button { 
+            margin: 10px; 
+            padding: 10px; 
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            background-color: rgba(0, 128, 255, 0.8);
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: rgba(0, 128, 255, 1);
+        }
+        #container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        #result { 
+            margin-top: 20px; 
+            padding: 15px; 
+            border: 1px solid #ddd; 
+            display: inline-block;
+            background: white;
+            color: black;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
 
-    <h2>Ứng dụng tính toán vật tư khung kèo</h2>
-    
-    <label>Chiều dài (m):</label>
-    <input type="number" id="length" min="1" required>
+    <div id="container">
+        <h2>Ứng dụng tính toán vật tư khung kèo</h2>
+        
+        <label>Chiều dài (m):</label>
+        <input type="number" id="length" min="1" required>
 
-    <label>Chiều rộng (m):</label>
-    <input type="number" id="width" min="1" required>
+        <label>Chiều rộng (m):</label>
+        <input type="number" id="width" min="1" required>
 
-    <label>Kiểu mái:</label>
-    <select id="roofType">
-        <option value="maiBang">Mái bằng</option>
-        <option value="maiDoc">Mái dốc</option>
-        <option value="maiChuA">Mái chữ A</option>
-    </select>
+        <label>Kiểu mái:</label>
+        <select id="roofType" onchange="updateHeight()">
+            <option value="maiBang" data-height="3">Mái bằng</option>
+            <option value="maiDoc" data-height="3.5">Mái dốc</option>
+            <option value="maiChuA" data-height="4">Mái chữ A</option>
+        </select>
 
-    <br>
-    <button onclick="calculateMaterials()">Tính toán</button>
+        <label>Chiều cao mái (m):</label>
+        <input type="number" id="height" min="2.5" step="0.1" required>
 
-    <div id="result"></div>
+        <br>
+        <button onclick="calculateMaterials()">Tính toán</button>
+
+        <div id="result"></div>
+    </div>
 
     <script src="script.js"></script>
 
