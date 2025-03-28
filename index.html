@@ -3,18 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tính toán vật tư khung kèo</title>
+    <title>TÍNH TOÁN VẬT TƯ KHUNG KÈO</title>
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            text-align: center; 
-            padding: 20px; 
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
             background: url('villa-garden.jpg') no-repeat center center/cover;
-            color: white; /* Để chữ dễ đọc trên nền ảnh */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
-        input, select, button { 
-            margin: 10px; 
-            padding: 10px; 
+        #container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+        }
+        .input-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .input-group label {
+            width: 30%;
+            font-size: 14px;
+        }
+        .input-group input {
+            width: 30%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+        }
+        select, button {
+            width: 100%;
+            margin: 15px 0;
+            padding: 12px;
             font-size: 16px;
             border-radius: 5px;
             border: none;
@@ -27,51 +56,95 @@
         button:hover {
             background-color: rgba(0, 128, 255, 1);
         }
-        #container {
-            background: rgba(0, 0, 0, 0.6);
-            padding: 20px;
-            border-radius: 10px;
-            display: inline-block;
-        }
-        #result { 
-            margin-top: 20px; 
-            padding: 15px; 
-            border: 1px solid #ddd; 
-            display: inline-block;
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
             background: white;
             color: black;
-            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-
     <div id="container">
-        <h2>Ứng dụng tính toán vật tư khung kèo</h2>
+        <h2>TÍNH TOÁN VẬT TƯ KHUNG KÈO</h2>
         
-        <label>Chiều dài (m):</label>
-        <input type="number" id="length" min="1" required>
+        <div class="input-group">
+            <label for="length">Dài (m)</label>
+            <label for="width">Rộng (m)</label>
+            <label for="height">Cao (m)</label>
+        </div>
+        <div class="input-group">
+            <input type="number" id="length" min="1" required oninput="suggestHeight()">
+            <input type="number" id="width" min="1" required oninput="suggestHeight()">
+            <input type="number" id="height" min="2.5" step="0.1" required>
+        </div>
 
-        <label>Chiều rộng (m):</label>
-        <input type="number" id="width" min="1" required>
+</select>
 
-        <label>Kiểu mái:</label>
+
+
+        <label for="roofType">Kiểu mái</label>
         <select id="roofType" onchange="updateHeight()">
-            <option value="maiBang" data-height="3">Mái bằng</option>
-            <option value="maiDoc" data-height="3.5">Mái dốc</option>
-            <option value="maiChuA" data-height="4">Mái chữ A</option>
+            <option value="nha1Mai" data-height="3">Nhà 1 Mái</option>
+            <option value="nha2MaiDoc" data-height="3.5">Nhà 2 Mái Dọc</option>
+            <option value="nha2MaiNgang" data-height="3.5">Nhà 2 Mái Ngang</option>
+            <option value="nhaMaiNhon" data-height="4">Nhà Mái Nhọn</option>
+            <option value="nhaMaiThai" data-height="4.5">Nhà Mái Thái</option>
         </select>
 
-        <label>Chiều cao mái (m):</label>
-        <input type="number" id="height" min="2.5" step="0.1" required>
+<label for="roofMaterial">Loại Mái Lợp</label>
+<select id="roofMaterial">
+    <option value="TonSongVuong">Mái Tôn Sóng Vuông</option>
+    <option value="TonSongNgoi">Mái Tôn Sóng Ngói</option>
+    <option value="NgoiXiMang">Mái Ngói XiMăng</option>
+    <option value="NgoiTrangMen">Mái Ngói Tráng Men</option>
+</select>
 
-        <br>
+       <label for="product">SẢN PHẨM KHUNG KÈO</label>
+        <select id="product">
+            <option value="ZACS">THANH KÈO ZACS</option>
+            <option value="SATRUSS_NG">SATRUSS NÂU GỖ</option>
+            <option value="SATRUSS_XB">SATRUSS XANH BLUE</option>
+            <option value="SATRUSS_LT">SATRUSS LẠNH TRẮNG</option>
+        </select>
+
+        <label for="frameMaterial">Vật tư Khung Kèo</label>
+        <select id="frameMaterial">
+            <option value="C7575">Thanh C7575</option>
+            <option value="C7510">Thanh C7510</option>
+            <option value="C10075">Thanh C10075</option>
+            <option value="C10010">Thanh C10010</option>
+            <option value="BC4075">Thanh BC4075</option>
+        </select>
+
+        <label for="purlinMaterial">Vật tư Mè (Đòn Tay)</label>
+        <select id="purlinMaterial">
+            <option value="TS2048">Thanh TS2048</option>
+            <option value="TS3548">Thanh TS3548</option>
+            <option value="TS4048">Thanh TS4048</option>
+            <option value="TS6148">Thanh TS6148</option>
+            <option value="TS6175">Thanh TS6175</option>
+        </select>
+
+ 
+
         <button onclick="calculateMaterials()">Tính toán</button>
 
         <div id="result"></div>
     </div>
 
-    <script src="script.js"></script>
-
+    <script>
+        function suggestHeight() {
+            let length = document.getElementById('length').value;
+            let width = document.getElementById('width').value;
+            let heightInput = document.getElementById('height');
+            
+            if (length && width) {
+                let suggestedHeight = Math.max(2.5, Math.min(5, (parseFloat(length) + parseFloat(width)) / 10));
+                heightInput.value = suggestedHeight.toFixed(1);
+            }
+        }
+    </script>
 </body>
 </html>
