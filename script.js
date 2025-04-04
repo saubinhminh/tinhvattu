@@ -6,6 +6,7 @@ function formatNumber(num) {
 
 
 function updateInputs() {
+  updateRoofImage();
   let P = parseFloat(document.getElementById("perimeter").value);
   let slopeDeg = parseFloat(document.getElementById("slope").value);
   let roofStyleVal = document.getElementById("roofStyle").value;
@@ -136,4 +137,27 @@ function updateGrandTotal() {
   let costPurlin = parseFloat(document.getElementById("costPurlin").textContent) || 0;
   let grandTotal = costTruss + costPurlin;
   document.getElementById("grandTotal").textContent = grandTotal.toFixed(2);
+}
+
+function updateRoofImage() {
+  const type = document.getElementById("roofType");
+  const selected = type.options[type.selectedIndex].text;
+  const img = document.getElementById("roofImage");
+
+  if (selected.includes("Bánh Ú")) {
+    img.src = "kieubanhu.png";
+    img.alt = "Nhà nhiều mái bánh ú";
+  } else if (selected.includes("Đỉnh Nhọn")) {
+    img.src = "kieudinhnhon.png";
+    img.alt = "Nhà 4 mái đỉnh nhọn";
+  } else if (selected.includes("Góc L")) {
+    img.src = "kieugocl.png";
+    img.alt = "Nhà 2 mái góc L";
+  } else if (selected.includes("Thẳng")) {
+    img.src = "kieuthang.png";
+    img.alt = "Nhà 2 mái thẳng";
+  } else {
+    img.src = "default.png";
+    img.alt = "Kiểu mái khác";
+  }
 }
