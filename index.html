@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TÍNH TOÁN VẬT TƯ MÁI NHÀ</title>
+  <title>DỰ TÍNH GIÁ TRỊ MÁI LỢP</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -15,7 +14,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       height: 100vh;
     }
     #container {
@@ -46,7 +45,7 @@
     }
     .flex-row {
       display: flex;
-      gap: 10px;
+      gap: 25px;
     }
     .flex-row > div {
       flex: 1;
@@ -61,6 +60,10 @@
       font-size: 16px;
       margin-top: 15px;
     }
+    .compact {
+      flex: 0.6;
+    }
+
     img {
       max-width: 100%;
       margin: 10px 0;
@@ -70,7 +73,8 @@
 </head>
 <body>
   <div id="container">
-    <h2>TÍNH TOÁN VẬT TƯ MÁI LỢP</h2>
+ 
+<h2 style="font-size: 22px; font-weight: bold; text-shadow: 1px 1px 3px black; margin-bottom: 10px;">DỰ TÍNH GIÁ TRỊ MÁI LỢP</h2>
 
     <div class="flex-row input-group">
       <div>
@@ -117,31 +121,33 @@
   </select>
 </div>
 
-
     <div class="flex-row input-group">
-      <div>
+      <div style="flex: 0.3;">
         <label for="roofMaterial">MÁI LỢP</label>
         <select id="roofMaterial" onchange="updateInputs()">
           <option value="NgoiXiMang" data-price="600000">Ngói XIMANG</option>
           <option value="NgoiMen" data-price="700000">Ngói MEN</option>
           <option value="TonSongNgoi" data-price="550000">Tôn Lạnh Màu</option>
         </select>
+      </div>  
+      
+      <div style="flex: 0.2;">
+       <label for="dientich">DIỆN TÍCH</label>
+       <input type="text" id="dientich" readonly>
       </div>
-      <div>
-        <label for="dientich">DIỆN TÍCH</label>
-        <input type="text" id="dientich" readonly>
-      </div>
-      <div>
+      
+      <div style="flex: 0.2;">
         <label for="dongia">ĐƠN GIÁ</label>
         <input type="text" id="dongia" readonly>
       </div>
-      <div>
+      
+      <div style="flex: 0.25;">
         <label for="thanhtien">THÀNH TIỀN</label>
         <input type="text" id="thanhtien" readonly>
       </div>
     </div>
 
-    <button onclick="calculateMaterials()">TÍNH TOÁN</button>
+    <button onclick="calculateMaterials()">TÍNH TOÁN VẬT TƯ</button>
   </div>
 
  <div id="result"></div>

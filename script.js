@@ -82,7 +82,7 @@ function calculateMaterials() {
               <option value="C10075">Thanh C10075</option>
               <option value="C10010">Thanh C10010</option>
               <option value="BC4075">Thanh BC4075</option>
-            </select> (khung kèo)
+            </select> (Kèo)
         </td>
         <td id="valTruss" class="right">${totalTruss.toFixed(2)}</td>
         <td><input type="number" id="priceTruss" oninput="updateCost('valTruss','priceTruss','costTruss')"></td>
@@ -95,7 +95,7 @@ function calculateMaterials() {
               <option value="TS2048">Thanh TS2048</option>
               <option value="TS6148">Thanh TS6148</option>
               <option value="TS6175">Thanh TS6175</option>
-            </select> (mè)
+            </select> (Mè)
         </td>
         <td id="valPurlin" class="right">${totalPurlin.toFixed(2)}</td>
         <td><input type="number" id="pricePurlin" oninput="updateCost('valPurlin','pricePurlin','costPurlin')"></td>
