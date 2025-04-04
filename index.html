@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TÍNH TOÁN VẬT TƯ KHUNG KÈO</title>
+  <title>TÍNH TOÁN VẬT TƯ MÁI NHÀ</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -22,133 +23,130 @@
       padding: 20px;
       border-radius: 10px;
       width: 90%;
-      max-width: 400px;
+      max-width: 500px;
     }
     .input-group {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
+      text-align: left;
     }
     .input-group label {
-      width: 30%;
+      display: block;
       font-size: 14px;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 5px;
     }
-    .input-group input {
-      width: 30%;
+    .input-group input,
+    .input-group select {
+      width: 100%;
       padding: 10px;
       font-size: 16px;
       border-radius: 5px;
       border: none;
     }
-    select, button {
-      width: 100%;
-      margin: 15px 0;
-      padding: 12px;
-      font-size: 16px;
-      border-radius: 5px;
-      border: none;
+    .flex-row {
+      display: flex;
+      gap: 10px;
+    }
+    .flex-row > div {
+      flex: 1;
     }
     button {
       background-color: rgba(0, 128, 255, 0.8);
       color: white;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: rgba(0, 128, 255, 1);
-    }
-    #result {
-      margin-top: 20px;
-      padding: 15px;
+      border: none;
+      padding: 12px;
       border-radius: 5px;
-      background: white;
-      color: black;
-      text-align: left;
-    }
-    table {
       width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
+      font-size: 16px;
+      margin-top: 15px;
     }
-    table, th, td {
-      border: 1px solid #ccc;
-    }
-    th, td {
-      padding: 8px;
-      font-size: 14px;
-    }
-    th {
-      background-color: #f0f0f0;
-      text-align: center;
-    }
-    .right {
-      text-align: right;
+    img {
+      max-width: 100%;
+      margin: 10px 0;
+      border-radius: 5px;
     }
   </style>
 </head>
 <body>
   <div id="container">
-    <h2>TÍNH TOÁN VẬT TƯ MÁI NHÀ</h2>
-    
-    <label for="roofType">Kiểu mái</label>
-    <select id="roofType" onchange="updateHeight()">
-      <option value="nhaMaiThai" data-height="">Nhà Mái Thái</option>        
-      <option value="nhaMaiNhon" data-height="">Nhà Mái Nhọn</option>
-    </select>
+    <h2>TÍNH TOÁN VẬT TƯ MÁI LỢP</h2>
 
-    <label for="roofMaterial">Loại Mái Lợp</label>
-    <select id="roofMaterial">
-      <option value="NgoiXiMang">Mái Lợp Ngói</option>
-      <option value="TonSongVuong">Mái Lợp Tôn</option>
-    </select>
-
-    <label for="frameMaterial">Vật tư Khung Kèo</label>
-    <select id="frameMaterial">
-      <option value="C7575">Thanh C7575</option>
-      <option value="C7510">Thanh C7510</option>
-      <option value="C10075">Thanh C10075</option>
-      <option value="C10010">Thanh C10010</option>
-      <option value="BC4075">Thanh BC4075</option>
-    </select>
-
-    <label for="purlinMaterial">Vật tư Mè (Đòn Tay)</label>
-    <select id="purlinMaterial">
-      <option value="TS4048">Thanh TS4048</option>
-      <option value="TS3548">Thanh TS3548</option>
-      <option value="TS2048">Thanh TS2048</option>
-      <option value="TS6148">Thanh TS6148</option>
-      <option value="TS6175">Thanh TS6175</option>
-    </select>
-
-    <div class="input-group">
-      <label for="length">Dài (m)</label>
-      <label for="width">Rộng (m)</label>
-      <label for="height">Cao (m)</label>
+    <div class="flex-row input-group">
+      <div>
+        <label for="roofType">KIỂU MÁI</label>
+        <select id="roofType" onchange="updateInputs()">
+          <option value="nhaMaiNhon">Nhà Nhiều Mái Bánh Ú</option>
+          <option value="nhaMaiNhon">Nhà 4 Mái Đỉnh Nhọn</option>
+          <option value="haiMai">Nhà 2 Mái Góc L</option>
+          <option value="haiMai">Nhà 2 Mái Thẳng</option>
+        </select>
+      </div>
+      <div>
+        <label for="roofStyle">ĐUÔI MÁI</label>
+        <select id="roofStyle" onchange="updateInputs()">
+          <option value="ngam">Mái ngậm</option>
+          <option value="roi">Mái rơi</option>
+        </select>
+      </div>
     </div>
-    <div class="input-group">
-      <input type="number" id="length" min="1" required oninput="suggestHeight()">
-      <input type="number" id="width" min="1" required oninput="suggestHeight()">
-      <input type="number" id="height" min="2.5" step="0.1" required>
-    </div>
-    
-    <button onclick="calculateMaterials()">Tính toán</button>
 
-    <div id="result"></div>
+    <img src="kieubanhu.png" alt="minh họa nhà">
+
+    <div class="flex-row input-group">
+      <div>
+        <label for="perimeter">CHU VI CỘNG DỒN</label>
+        <input type="number" id="perimeter" oninput="updateInputs()">
+      </div>
+      <div>
+        <label for="slope">ĐỘ DỐC MÁI</label>
+        <input type="number" id="slope" value="30" oninput="updateInputs()">
+      </div>
+    </div>
+
+    <img src="matbangmai.png" alt="sơ đồ chu vi">
+
+ <div class="input-group">
+  <label for="frameMaterial">LOẠI SẢN PHẨM</label>
+  <select id="frameMaterial">
+    <option value="KEOXL">THANH KÈO XANH LAM BLUESCOPE</option>
+    <option value="KEOVH">THANH KÈO VÀNG HỒNG SMARTRUSS</option>
+    <option value="SANAU">THANH KÈO SATRUSS NÂU GỖ</option>
+    <option value="SAXANH">THANH KÈO SATRUSS XANH BLUE</option>
+    <option value="SATRANG">THANH KÈO SATRUSS LẠNH TRẮNG</option>
+  </select>
+</div>
+
+
+    <div class="flex-row input-group">
+      <div>
+        <label for="roofMaterial">MÁI LỢP</label>
+        <select id="roofMaterial" onchange="updateInputs()">
+          <option value="NgoiXiMang" data-price="600000">Ngói XIMANG</option>
+          <option value="NgoiMen" data-price="700000">Ngói MEN</option>
+          <option value="TonSongNgoi" data-price="550000">Tôn Lạnh Màu</option>
+        </select>
+      </div>
+      <div>
+        <label for="dientich">DIỆN TÍCH</label>
+        <input type="text" id="dientich" readonly>
+      </div>
+      <div>
+        <label for="dongia">ĐƠN GIÁ</label>
+        <input type="text" id="dongia" readonly>
+      </div>
+      <div>
+        <label for="thanhtien">THÀNH TIỀN</label>
+        <input type="text" id="thanhtien" readonly>
+      </div>
+    </div>
+
+    <button onclick="calculateMaterials()">TÍNH TOÁN</button>
   </div>
 
-  <script>
-    // Hàm gợi ý chiều cao dựa trên Dài và Rộng (theo thiết kế cũ)
-    function suggestHeight() {
-      let length = document.getElementById('length').value;
-      let width = document.getElementById('width').value;
-      let heightInput = document.getElementById('height');
-      
-      if (length && width) {
-        let suggestedHeight = Math.max(2.5, Math.min(5, (parseFloat(length) + parseFloat(width)) / 10));
-        heightInput.value = suggestedHeight.toFixed(1);
-      }
-    }
-  </script>
-  <!-- Nhúng file script.js -->
+ <div id="result"></div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>

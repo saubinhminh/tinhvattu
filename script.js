@@ -1,58 +1,73 @@
-document.addEventListener("DOMContentLoaded", function () {
-  updateHeight(); // Đặt giá trị mặc định khi trang tải
-});
 
-function updateHeight() {
-  let roofType = document.getElementById("roofType");
-  let selectedOption = roofType.options[roofType.selectedIndex];
-  let defaultHeight = selectedOption.getAttribute("data-height");
-  document.getElementById("height").value = defaultHeight;
+// Hàm định dạng số có dấu phẩy ngăn cách đơn vị
+function formatNumber(num) {
+  return Math.round(num).toLocaleString('vi-VN');
 }
 
-// Hàm tính toán kết quả
-function calculateMaterials() {
-  // Lấy giá trị đầu vào
-  let L = parseFloat(document.getElementById("length").value);
-  let W = parseFloat(document.getElementById("width").value);
-  let H = parseFloat(document.getElementById("height").value);
 
-  // Kiểm tra hợp lệ
-  if (isNaN(L) || isNaN(W) || isNaN(H) || L <= 0 || W <= 0 || H <= 0) {
-    alert("Vui lòng nhập kích thước hợp lệ!");
+function updateInputs() {
+  let P = parseFloat(document.getElementById("perimeter").value);
+  let slopeDeg = parseFloat(document.getElementById("slope").value);
+  let roofStyleVal = document.getElementById("roofStyle").value;
+  let materialSelect = document.getElementById("roofMaterial");
+  let price = parseFloat(materialSelect?.options[materialSelect.selectedIndex]?.getAttribute("data-price")) || 0;
+
+  if (isNaN(P) || isNaN(slopeDeg) || P <= 0 || slopeDeg <= 0) {
+    document.getElementById("dientich").value = "";
+    document.getElementById("dongia").value = "";
+    document.getElementById("thanhtien").value = "";
     return;
   }
 
-  // 1. Diện tích nền & diện tích mái
-  let floorArea = L * W;
-  // Giữ nguyên cách tính cũ: mái tăng 10%
-  let roofArea = floorArea * 1.1;
+  let W = P / 5;
+  let L = 3 * P / 10;
+  if (roofStyleVal === "roi") {
+    L += 1;
+    W += 1;
+  }
 
-  // 2. Số kèo (khoảng cách 1,1m dọc chiều dài)
+  let slopeRad = slopeDeg * Math.PI / 180;
+  let roofArea = L * W * Math.sqrt(1 + Math.tan(slopeRad) ** 2);
+  let thanhTien = roofArea * price;
+
+  document.getElementById("dientich").value = formatNumber(roofArea);
+  document.getElementById("dongia").value = formatNumber(price);
+  document.getElementById("thanhtien").value = formatNumber(thanhTien);
+}
+
+function calculateMaterials() {
+
+  let P = parseFloat(document.getElementById("perimeter").value);
+  let slopeDeg = parseFloat(document.getElementById("slope").value);
+  let roofStyleVal = document.getElementById("roofStyle").value;
+
+  if (isNaN(P) || isNaN(slopeDeg) || P <= 0 || slopeDeg <= 0) {
+    alert("Vui lòng nhập dữ liệu hợp lệ!");
+    return;
+  }
+
+  // Tính L và W theo tỉ lệ L = 1.5 * W => P = 2(L + W) => W = P / 5, L = 3P / 10
+  let W = P / 5;
+  let L = 3 * P / 10;
+
+  // Nếu mái rơi, cộng thêm 1m (0.5m mỗi bên) cho cả L và W
+  if (roofStyleVal === "roi") {
+    L += 1;
+    W += 1;
+  }
+
+  let slopeRad = slopeDeg * Math.PI / 180;
+  let roofArea = L * W * Math.sqrt(1 + Math.tan(slopeRad) ** 2);
   let numTrusses = Math.floor(L / 1.1) + 1;
-
-  // 3. Tính độ dốc mái (D) = sqrt((W/2)^2 + H^2)
+  let H = Math.tan(slopeRad) * (W / 2);
   let D = Math.sqrt((W / 2) ** 2 + H ** 2);
-
-  // Mỗi kèo tam giác:
-  //  - 2 thanh chord trên (mỗi dài D)
-  //  - 1 thanh chord dưới (dài W)
-  // => 1 kèo = (2D + W) mét
   let trussMeter = 2 * D + W;
-  let totalC7575 = trussMeter * numTrusses;
-
-  // 4. Tính mè (khoảng cách 0,34m dọc theo dốc)
-  //    Số hàng mè 1 dốc = floor(D / 0.34) + 1
-  //    Mỗi hàng dài L, có 2 dốc => nhân 2
+  let totalTruss = trussMeter * numTrusses;
   let numPurlinRows = Math.floor(D / 0.34) + 1;
   let totalPurlin = 2 * numPurlinRows * L;
 
-  // 5. Tạo bảng kết quả + input đơn giá
   let resultDiv = document.getElementById("result");
-  // Xóa nội dung cũ (nếu có)
-  resultDiv.innerHTML = "";
-
-  // Tạo bảng HTML
-  let tableHTML = `
+  resultDiv.innerHTML = `
     <table>
       <tr>
         <th>Hạng mục</th>
@@ -60,46 +75,42 @@ function calculateMaterials() {
         <th>Đơn giá</th>
         <th>Thành tiền</th>
       </tr>
-      <!-- Diện tích nền -->
       <tr>
-        <td>Diện tích nền</td>
-        <td id="valFloor" class="right">${floorArea.toFixed(2)}</td>
-        <td><input type="number" id="priceFloor" placeholder="Đơn giá" oninput="updateCost('valFloor','priceFloor','costFloor')"></td>
-        <td id="costFloor" class="right">0</td>
+        <td><select id="trussSelect" onchange="updateTrussMaterial()">
+              <option value="C7575">Thanh C7575</option>
+              <option value="C7510">Thanh C7510</option>
+              <option value="C10075">Thanh C10075</option>
+              <option value="C10010">Thanh C10010</option>
+              <option value="BC4075">Thanh BC4075</option>
+            </select> (khung kèo)
+        </td>
+        <td id="valTruss" class="right">${totalTruss.toFixed(2)}</td>
+        <td><input type="number" id="priceTruss" oninput="updateCost('valTruss','priceTruss','costTruss')"></td>
+        <td id="costTruss" class="right">0</td>
       </tr>
-      <!-- Diện tích mái -->
       <tr>
-        <td>Diện tích mái</td>
-        <td id="valRoof" class="right">${roofArea.toFixed(2)}</td>
-        <td><input type="number" id="priceRoof" placeholder="Đơn giá" oninput="updateCost('valRoof','priceRoof','costRoof')"></td>
-        <td id="costRoof" class="right">0</td>
-      </tr>
-      <!-- Thanh C7575 -->
-      <tr>
-        <td>Thanh C7575 (khung kèo)</td>
-        <td id="valC7575" class="right">${totalC7575.toFixed(2)}</td>
-        <td><input type="number" id="priceC7575" placeholder="Đơn giá" oninput="updateCost('valC7575','priceC7575','costC7575')"></td>
-        <td id="costC7575" class="right">0</td>
-      </tr>
-      <!-- Thanh TS4048 -->
-      <tr>
-        <td>Thanh TS4048 (mè)</td>
-        <td id="valTS4048" class="right">${totalPurlin.toFixed(2)}</td>
-        <td><input type="number" id="priceTS4048" placeholder="Đơn giá" oninput="updateCost('valTS4048','priceTS4048','costTS4048')"></td>
-        <td id="costTS4048" class="right">0</td>
+        <td><select id="purlinSelect" onchange="updatePurlinMaterial()">
+              <option value="TS4048">Thanh TS4048</option>
+              <option value="TS3548">Thanh TS3548</option>
+              <option value="TS2048">Thanh TS2048</option>
+              <option value="TS6148">Thanh TS6148</option>
+              <option value="TS6175">Thanh TS6175</option>
+            </select> (mè)
+        </td>
+        <td id="valPurlin" class="right">${totalPurlin.toFixed(2)}</td>
+        <td><input type="number" id="pricePurlin" oninput="updateCost('valPurlin','pricePurlin','costPurlin')"></td>
+        <td id="costPurlin" class="right">0</td>
       </tr>
     </table>
-    <p style="margin-top:10px;text-align:right;">
-      <strong>Tổng cộng: 
-        <span id="grandTotal">0</span>
-      </strong>
+    <p style="margin-top:10px; text-align:right;">
+      <strong>Tổng cộng: <span id="grandTotal">0</span></strong>
     </p>
   `;
 
-  resultDiv.innerHTML = tableHTML;
+  // Cập nhật luôn diện tích + đơn giá + thành tiền bên trên nếu có
+  document.getElementById("dientich").value = formatNumber(roofArea);
 }
 
-// Hàm cập nhật thành tiền khi người dùng nhập đơn giá
 function updateCost(valueCellId, priceInputId, costCellId) {
   let value = parseFloat(document.getElementById(valueCellId).textContent) || 0;
   let price = parseFloat(document.getElementById(priceInputId).value) || 0;
@@ -108,13 +119,21 @@ function updateCost(valueCellId, priceInputId, costCellId) {
   updateGrandTotal();
 }
 
-// Tính tổng cộng
-function updateGrandTotal() {
-  let costFloor = parseFloat(document.getElementById("costFloor").textContent) || 0;
-  let costRoof = parseFloat(document.getElementById("costRoof").textContent) || 0;
-  let costC7575 = parseFloat(document.getElementById("costC7575").textContent) || 0;
-  let costTS4048 = parseFloat(document.getElementById("costTS4048").textContent) || 0;
+function updateTrussMaterial() {
+  document.getElementById("priceTruss").value = "";
+  document.getElementById("costTruss").textContent = "0";
+  updateGrandTotal();
+}
 
-  let grandTotal = costFloor + costRoof + costC7575 + costTS4048;
+function updatePurlinMaterial() {
+  document.getElementById("pricePurlin").value = "";
+  document.getElementById("costPurlin").textContent = "0";
+  updateGrandTotal();
+}
+
+function updateGrandTotal() {
+  let costTruss = parseFloat(document.getElementById("costTruss").textContent) || 0;
+  let costPurlin = parseFloat(document.getElementById("costPurlin").textContent) || 0;
+  let grandTotal = costTruss + costPurlin;
   document.getElementById("grandTotal").textContent = grandTotal.toFixed(2);
 }
