@@ -6,13 +6,26 @@ function formatNumber(num) {
 
 
 function updateInputs() {
+
+  const frameType = document.getElementById("frameMaterial").value;
+  let extraPrice = 0;
+  switch (frameType) {
+    case "KEOXL": extraPrice = 50000; break;
+    case "KEOVH": extraPrice = 150000; break;
+    case "SANAU": extraPrice = 0; break;
+    case "SAXANH": extraPrice = -10000; break;
+    case "SATRANG": extraPrice = -20000; break;
+  }
+  let roofMaterial = document.getElementById("roofMaterial");
+  let basePrice = parseFloat(roofMaterial?.options[roofMaterial.selectedIndex]?.getAttribute("data-price")) || 0;
+  let price = basePrice + extraPrice;
+
   updateRoofImage();
   let P = parseFloat(document.getElementById("perimeter").value);
   let slopeDeg = parseFloat(document.getElementById("slope").value);
   let roofStyleVal = document.getElementById("roofStyle").value;
   let materialSelect = document.getElementById("roofMaterial");
-  let price = parseFloat(materialSelect?.options[materialSelect.selectedIndex]?.getAttribute("data-price")) || 0;
-
+  
   if (isNaN(P) || isNaN(slopeDeg) || P <= 0 || slopeDeg <= 0) {
     document.getElementById("dientich").value = "";
     document.getElementById("dongia").value = "";
@@ -71,8 +84,8 @@ function calculateMaterials() {
   resultDiv.innerHTML = `
     <table>
       <tr>
-        <th>Hạng mục</th>
-        <th>Khối lượng</th>
+        <th>Vật tư</th>
+        <th>Số mét</th>
         <th>Đơn giá</th>
         <th>Thành tiền</th>
       </tr>
